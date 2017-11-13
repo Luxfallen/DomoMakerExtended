@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const models = require('../models');
 const Domo = models.Domo;
 
