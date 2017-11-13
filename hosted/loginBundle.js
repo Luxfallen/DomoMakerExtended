@@ -84,8 +84,6 @@ var SignupWindow = function SignupWindow(props) {
   );
 };
 
-// Why csrf and not "props?
-
 var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render(React.createElement(LoginWindow, { csrf: csrf }), document.querySelector("#content"));
 };
@@ -125,7 +123,7 @@ $(document).ready(function () {
 "use strict";
 
 /* eslint-disable */
-// Must ask about this. It feels wrong. This is ES5, isn't it?
+// Must ask about this. It feels wrong.
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);

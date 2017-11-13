@@ -62,8 +62,6 @@ const SignupWindow = (props) => {
   );
 };
 
-// Why csrf and not "props?
-
 const createLoginWindow = (csrf) => {
   ReactDOM.render(
     <LoginWindow csrf={csrf} />,

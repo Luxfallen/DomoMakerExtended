@@ -23,6 +23,17 @@ const handleDomo = (e) => {
   return false;
 };
 
+const handleDomoDel = (e) => {
+  const key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
+  const token = $('#csrf').serialize();
+  const obj = `_id=${key}&${token}`;
+  sendAjax('DELETE', '/delDomo', obj, (msg) => {
+    console.dir(msg);
+  });
+  e.target.parentElement.hidden = true;
+  loadDomosFromServer();
+};
+
 const DomoForm = (props) => {
   return (
     <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="/maker" method="POST" className="domoForm">
@@ -30,7 +41,9 @@ const DomoForm = (props) => {
       <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
       <label htmlFor="age">Age: </label>
       <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
-      <input type="hidden" name="_csrf" value={props.csrf}/>
+      <label htmlFor="rawrLevel">Level: </label>
+      <input id="domoRawr" type="number" min="1" max="9001" name="rawrLevel" placeholder="RAWR"/>
+      <input type="hidden" id="csrf" name="_csrf" value={props.csrf}/>
       <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
     </form>
   );
@@ -47,10 +60,12 @@ const DomoList = (props) => {
 
   const domoNodes = props.domos.map((domo) => {
     return (
-      <div key={domo._id} className="domo">
+      <div key={domo._id} data-key={domo._id} className="domo">
         <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace"/>
         <h3 className="domoName"> Name: {domo.name} </h3>
         <h3 className="domoAge"> Age: {domo.age} </h3>
+        <h3 className="domoRawr"> RAWR Level: {domo.rawrLevel} </h3>
+        <input type="button" className="domoDelete" value="Delete" onClick={handleDomoDel} />
       </div>
     );
   });

@@ -23,6 +23,17 @@ var handleDomo = function handleDomo(e) {
   return false;
 };
 
+var handleDomoDel = function handleDomoDel(e) {
+  var key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
+  var token = $('#csrf').serialize();
+  var obj = '_id=' + key + '&' + token;
+  sendAjax('DELETE', '/delDomo', obj, function (msg) {
+    console.dir(msg);
+  });
+  e.target.parentElement.hidden = true;
+  loadDomosFromServer();
+};
+
 var DomoForm = function DomoForm(props) {
   return React.createElement(
     'form',
@@ -39,7 +50,13 @@ var DomoForm = function DomoForm(props) {
       'Age: '
     ),
     React.createElement('input', { id: 'domoAge', type: 'text', name: 'age', placeholder: 'Domo Age' }),
-    React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+    React.createElement(
+      'label',
+      { htmlFor: 'rawrLevel' },
+      'Level: '
+    ),
+    React.createElement('input', { id: 'domoRawr', type: 'number', min: '1', max: '9001', name: 'rawrLevel', placeholder: 'RAWR' }),
+    React.createElement('input', { type: 'hidden', id: 'csrf', name: '_csrf', value: props.csrf }),
     React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
   );
 };
@@ -60,7 +77,7 @@ var DomoList = function DomoList(props) {
   var domoNodes = props.domos.map(function (domo) {
     return React.createElement(
       'div',
-      { key: domo._id, className: 'domo' },
+      { key: domo._id, 'data-key': domo._id, className: 'domo' },
       React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domo face', className: 'domoFace' }),
       React.createElement(
         'h3',
@@ -75,7 +92,15 @@ var DomoList = function DomoList(props) {
         ' Age: ',
         domo.age,
         ' '
-      )
+      ),
+      React.createElement(
+        'h3',
+        { className: 'domoRawr' },
+        ' RAWR Level: ',
+        domo.rawrLevel,
+        ' '
+      ),
+      React.createElement('input', { type: 'button', className: 'domoDelete', value: 'Delete', onClick: handleDomoDel })
     );
   });
 
@@ -104,7 +129,7 @@ $(document).ready(function () {
 "use strict";
 
 /* eslint-disable */
-// Must ask about this. It feels wrong. This is ES5, isn't it?
+// Must ask about this. It feels wrong.
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);

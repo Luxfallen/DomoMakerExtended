@@ -1,5 +1,5 @@
 /* eslint-disable */
-// Must ask about this. It feels wrong. This is ES5, isn't it?
+// Must ask about this. It feels wrong.
 
 const handleError = (message) => {
   $("#errorMessage").text(message);
